@@ -1,19 +1,22 @@
+%% In 3D
+% in x from node 1 to 2
+% in y from node 2 to 1
+% in z the population
 clear;
 close all;
 clc;
 
 %% Define problem parameters
 % Fixed time required to move on each road
-t = [ 0  0    0   0   0   0   0   0  0; 
-     10  0    0   0   0   0   0   0  0; 
-     10  0    0   0   0   0   0   0  0; 
-     10  0    0   0   0   0   0   0  0; 
-     10  10  10   0   0   0   0   0  0; 
-      0  10   0   0  10   0   0   0  0; 
-      0  0   10  10  10   0   0   0  0; 
-      0  0    0  10   0   0  10   0  0; 
-      0  0    0   0  10  10  10  10  0];
-
+t = [ 0  0  0  0  0  0  0  0  0; 
+      1  0  0  0  0  0  0  0  0; 
+      1  0  0  0  0  0  0  0  0; 
+      1  0  0  0  0  0  0  0  0; 
+      1  1  1  0  0  0  0  0  0; 
+      0  1  0  0  1  0  0  0  0; 
+      0  0  1  1  1  0  0  0  0; 
+      0  0  0  1  0  0  1  0  0; 
+      0  0  0  0  1  1  1  1  0];
 
 % Rate of passage of vehicles on each road
 a = [0     0    0    0     0  0  0  0  0; 
@@ -26,8 +29,6 @@ a = [0     0    0    0     0  0  0  0  0;
      0     0    0    1.25  0  0  1  0  0; 
      0     0    0    0     1  1  1  1  0];
 
-% t = [10 10 10 10 10 10 10 10 10];
-% a = [1; 1; 1; 1; 1; 1; 1; 1; 1];
 % Maximum rate of passage of vehicles on each road
 c = [0      0     0      0      0      0      0      0      0; 
      49.19  0     0      0      0      0      0      0      0; 
@@ -41,41 +42,34 @@ c = [0      0     0      0      0      0      0      0      0;
  
 incoming_rate = 100; % Incoming rate of vehicles
 
+%% Task 3
+% Calculate the maximum and minimum values of the rate, taking into account the variation
+variation = 0.15; % variation by 15%
+max_rate = incoming_rate + incoming_rate * variation;
+min_rate = incoming_rate - incoming_rate * variation;
+incoming_rate = min_rate + (max_rate - min_rate) * rand();
+
+%% Task 2
 % Define algorithm parameters
 population_size = 100;
-mutation_rate = 0.9;
+mutation_rate = 0.1;
 crossover_rate = 0.8;
-max_generations = 100;
+max_generations = 10000;
 
-% Run the genetic algorithm
+% Run the genetic algorithm 
 [best_fitness, indexOfMinimumFitness] = genetic_algorithm(t, a, c, incoming_rate, population_size, mutation_rate, crossover_rate, max_generations);
 
-% Print the best solution
-% fprintf('Best fitness: %f, Best solution: %s\n', best_fitness, mat2str(best_solution));
-% for i = 1:max_generations
-%     fprintf('Best fitness for generation %d : %f\n', i, best_fitness(i));
-% end
-
-% Plot the results
-for i = 1:length(c)
-    plot_results(best_fitness(:,:,i));
+% Print the minimum time of the network
+minimumTime = [];
+for i = 1:length(c)-1   
+    minimumTime(i) = mean(best_fitness(:,i,:));
+    fprintf('The minimum time of node %d of the network\naccording to the genetic algorithm is: %f\n\n', i, minimumTime(i));
 end
 
+fprintf('The minimum time for the network\naccording to the genetic algorithm is: %f\n', sum(minimumTime));
 
-% for i = 1:length(c)
-%     plot_best_solution(best_fitness(:,:,i));
-% end
-% plot_best_solution(best_fitness);
-%     fit(:,:,index(:,:,1))
-%     index(:,:,1)
-%     best_solution(:,:,1)
-    % Get only the minimum values from each row (roads)
-% plot_best_solution(best_solution_history(:,1));
-
-% στον x αξονα ειναι οι δρομοι
-% στον y το population του καθε δρομου
-
-%% Στον 3D
-% στον x το απο τον κομβο 1 στον 2
-% στον y το απο τον κομβο 2 στον 1
-% στον z το population
+for i = 1:length(c)
+    plot_best_solution(best_fitness,i);
+%     file_name = ['plot2_' num2str(i) '.png'];
+%     saveas(gcf, file_name, 'png');
+end

@@ -1,8 +1,7 @@
 % t: vector of fixed time required to move on each road
 % a: vector of rate of passage of vehicles on each road
 % c: vector of maximum rate of passage of vehicles on each road
-% incoming_rate: constant representing the incoming rate of vehicles
-function [x0, Aeq, beq, lb, ub] = initialization(t, a, c, incoming_rate)
+function [x0, Aeq, beq, lb, ub] = initialization(t, a, c)
     % Initialize decision variables
     x0 = c./2; % Start with initial guess of half of maximum capacity
     

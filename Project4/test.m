@@ -1,10 +1,15 @@
+%% In 2D
+% in x are the roads
+% in y the population of the trajectory
+
+%% In 3D
+% in x from node 1 to 2
+% in y from node 2 to 1
+% in z the population
 clear;
 close all;
 clc;
 
-% t = [1 2 3 4 5];
-% a = [50; 1; 1; 1.25 ; 1.5];
-% c = [5 5 5 5 5; 5 5 5 5 5; 5 5 5 5 5; 5 5 5 5 5; 5 5 5 5 5];
 population_size = 10;
 incoming_rate = 100;
 parent1 = [1; 2; 3; 4; 5; 6];
@@ -43,24 +48,8 @@ c = [0      0     0      0      0      0      0      0      0;
      0      0     0      0      32.76  59.73  53.83  61.65  0];
 
 
-[x0, Aeq, beq, lb, ub] = initialization(t, a, c, incoming_rate); %να κανω τα x0 aeq beq
+[x0, Aeq, beq, lb, ub] = initialization(t, a, c); 
 population = create_new_member(lb, ub, population_size);
 [child1, child2] = crossover(population(:,:,1), population(:,:,2));
-mutant = mutate(child1, lb, ub, mutation_rate); % ισως να το κανω να δινει και μικροτερες τιμες πιο πολυ γιατι δινει μονο μεγαλυτερες
-fit = fitness(population, t, a, c, incoming_rate) % Δεν ξερω αν το fitness κανει σωστα τις δυο πρωτες στυλες
-
-
-% best_solution(:,:,1) =[1.5071    0.2023    0.8261    0.3691    0.8745];
-% 
-% 
-% best_solution(:,:,2) = [0.2168    2.1027    0.0021    0.4692    1.8473];
-%    
-% best_solution = min(best_solution,[],3)
-%% Στον 2D
-% στον x ειναι οι δρομοι
-% στον y το population του καθε δρομου
-
-%% Στον 3D
-% στον x το απο τον κομβο 1 στον 2
-% στον y το απο τον κομβο 2 στον 1
-% στον z το population
+mutant = mutate(child1, lb, ub, mutation_rate);
+fit = fitness(population, t, a, c, incoming_rate) 
